@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration  
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.qysgps.waterdma.util.PageData" alias="pd"/>
+		<typeAlias type="com.qysgps.waterdma.entity.User" alias="User"/>
+		<typeAlias type="com.qysgps.waterdma.entity.Menu" alias="Menu"/>
+		<typeAlias type="com.qysgps.waterdma.entity.Role" alias="Role"/>
+	</typeAliases>
+</configuration>

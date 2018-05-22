@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qysgps.waterdma.dao.UserDao">
+	<!-- 更具用户名和密码查询用户-->
+	<select id="getUserByNameAndPwd" parameterType="pd" resultType="pd" useCache="false"><!-- insert update delete (flushCache="true/false") -->
+		select * 
+		from sys_water_user
+		where 1=1
+		<if test="USERNAME != null and PASSWORD !=null">
+			and username = #{USERNAME} and password = #{PASSWORD}
+		</if>
+	</select>
+	<!-- 更具用户名查询用户 -->
+	<select id="getUserByName" parameterType="String" resultType="pd">
+		select * 
+		from sys_water_user
+		where username = #{USERNAME}
+	</select>
+	<!-- 得到角色列表信息 -->
+	<select id="getUserPageListJson" parameterType="pd" resultType="pd" statementType="CALLABLE">
+		{call upx_select(
+			#{rows,mode=IN,jdbcType=INTEGER},
+			#{page,mode=IN,jdbcType=INTEGER},
+			#{condition,mode=IN,jdbcType=VARCHAR},
+			#{keyword,mode=IN,jdbcType=VARCHAR},
+			#{total,mode=OUT,jdbcType=INTEGER},
+			#{records,mode=OUT,jdbcType=INTEGER}
+		)}
+	</select>
+	<!-- 添加用户 -->
+	<insert id="insertUser" parameterType="pd">
+		insert into sys_water_user
+		values(
+		#{CREATE_DATE},#{USER_ORDER},#{USER_ID},#{USERNAME},#{PASSWORD},#{NAME},
+		#{ROLE_ID},#{SEX},#{MOBILE},#{ADD_QX},#{DEL_QX},#{CHA_QX},#{EDIT_QX},#{RIGHTS}
+		)
+	</insert>
+	<!-- 更具用户id删除用户-->
+	<delete id="deleteUserById" parameterType="pd">
+		delete from sys_water_user
+		where user_id = #{USER_ID}
+	</delete>
+	<!-- 更具用户id修改用户普通信息-->
+	<update id="updateUserInfoById" parameterType="pd">
+		update sys_water_user
+		<set>
+			<if test="USERNAME != null and USERNAME != ''">
+				USERNAME = #{USERNAME},
+			</if>
+			<if test="NAME != null and NAME != ''">
+				NAME = #{NAME},
+			</if>
+			<if test="ROLE_ID != null and ROLE_ID != ''">
+				ROLE_ID = #{ROLE_ID},
+			</if>
+			<if test="SEX != null and SEX != ''">
+				SEX = #{SEX},
+			</if>
+			<if test="MOBILE != null and MOBILE != ''">
+				MOBILE = #{MOBILE},
+			</if>
+				ADD_QX = #{ADD_QX},
+				DEL_QX = #{DEL_QX},
+				EDIT_QX = #{EDIT_QX},
+				CHA_QX = #{CHA_QX},
+				RIGHTS = #{RIGHTS}
+		</set>
+		where user_id = #{USER_ID}
+	</update>
+	<!-- 更具用户id查询用户-->
+	<select id="getUserById" parameterType="pd" resultType="pd">
+		select * from sys_water_user
+		where user_id = #{USER_ID}
+	</select>
+	<!-- 更具用户id修改用户QX信息-->
+	<update id="updateUserQXById" parameterType="pd">
+		update sys_water_user
+		set ADD_QX = #{ADD_QX},DEL_QX = #{DEL_QX},EDIT_QX = #{EDIT_QX},
+		CHA_QX = #{CHA_QX},RIGHTS = #{RIGHTS}
+		where user_id = #{USER_ID}
+	</update>
+	
+	<!-- 更具角色id修改用户QX信息-->
+	<update id="updateUserQXByRoleId" parameterType="pd">
+		update sys_water_user
+		set ADD_QX = #{ADD_QX},DEL_QX = #{DEL_QX},EDIT_QX = #{EDIT_QX},
+		CHA_QX = #{CHA_QX},RIGHTS = #{RIGHTS}
+		where ROLE_ID = #{ROLE_ID}
+	</update>
+	<select id="getMaxOrder" resultType="pd">
+		select max(user_order) as USER_ORDER
+		from sys_water_user
+	</select>
+</mapper>

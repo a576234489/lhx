@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qysgps.waterdma.dao.MenuDao">
+	<resultMap type="Menu" id="menuResultMap">
+		<id column="MENU_ID" property="id"/>
+		<result column="MENU_NAME" property="text"/>
+		<result column="PARENT_ID" property="parentnodes"/>
+		<result column="MENU_ICON" property="img"/>
+		<result column="IS_LEAF" property="isLeaf"/>
+		<result column="URL" property="url"/>
+	</resultMap>
+	<select id="listAllParentMenu" resultMap="menuResultMap">
+		select * from SYS_WATER_MENU
+		where PARENT_ID = '0'
+	</select>
+	
+	<select id="listSubMenuByParentId" parameterType="String" resultMap="menuResultMap">
+		select  * from SYS_WATER_MENU
+		where PARENT_ID = #{roleId}
+	</select>
+	
+	<select id="findMaxId" parameterType="pd" resultType="pd">
+		select MAX(MENU_ID) MID FROM SYS_WATER_MENU
+	</select>
+	
+	<insert id="insertMenu" parameterType="Menu">
+		insert into SYS_WATER_MENU (
+			MENU_ID,
+			MENU_NAME,
+			PARENT_ID,
+			MENU_ICON,
+		) values (
+			#{MENU_ID},
+			#{MENU_NAME},
+			#{PARENT_ID},
+			#{MENU_ICON},
+		)
+	</insert>
+	
+	<select id="getMenuById" parameterType="pd" resultType="pd">
+		select *
+		 from SYS_WATER_MENU 
+		 where MENU_ID=#{menuId}
+	</select>
+	
+	<select id="getMenuByParentId" parameterType="String" resultMap="menuResultMap">
+		select *
+		 from SYS_WATER_MENU 
+		 where PARENT_ID=#{parentId}
+	</select>
+	
+	<update id="updateMenuById" parameterType="pd">
+		update sys_water_menu
+		<if test="#{isLeaf != null}">
+			set is_leaf = #{isLeaf}
+		</if>
+		where menu_id = #{menuId}
+	</update>
+	
+	<insert id="addMenu" parameterType="Menu">
+		insert into sys_water_menu(
+			url,is_leaf,menu_id,menu_name,parent_id,menu_icon
+		)values(
+			#{url},#{isLeaf},#{id},#{text},#{parentnodes},#{img}
+		)
+		
+	</insert>
+</mapper>
